@@ -13,32 +13,27 @@ class UsbReader():
     
     def copiar(self,origen,destino):
         for archivo in os.listdir(origen):
-            rutaOrigen = os.path.join(origen, archivo)
-            rutaDestino = os.path.join(destino, archivo)
-            if os.path.isfile(rutaOrigen):
-                shutil.copy(rutaOrigen, rutaDestino)
-                print('listo')
+            ruta_origen = os.path.join(origen, archivo)
+            ruta_destino = os.path.join(destino, archivo)
+            if os.path.isfile(ruta_origen) and not os.path.exists(ruta_destino):
+                shutil.copy(ruta_origen, ruta_destino)
+                print(f'Archivo copiado a destino: {archivo}')
+        for archivo in os.listdir(destino):
+            ruta_origen = os.path.join(origen, archivo)
+            ruta_destino = os.path.join(destino, archivo)
+            if os.path.isfile(ruta_destino) and not os.path.exists(ruta_origen):
+                shutil.copy(ruta_destino, ruta_origen)
+                print(f'Archivo copiado a origen: {archivo}')
 
     def consultar(self):
         nombreCarpeta = filedialog.askdirectory(title='Selecciona la carpeta de la USB')
         if nombreCarpeta:
             print('existe')
-            nombre = os.path.basename(nombreCarpeta)
-            print(nombre)
             print('Ahora seleccione la carpeta donde va a copiar')
             comparador = filedialog.askdirectory(title='Selecciona la carpeta donde va a copiar')
-            nombre2 = os.path.basename(comparador)
-            print(nombre2)
             if comparador:
-               rutaDestino = os.path.join(comparador, nombre)
-               print(rutaDestino)
-               if os.path.exists(rutaDestino):
-                   print(f"La carpeta '{nombre}' ya existe en la ubicación de destino.")
-                   self.copiar(nombreCarpeta, comparador)
-               else:
-                   os.makedirs(rutaDestino)
-                   print(f"Se creó la carpeta '{nombre}' en la ubicación de destino.")
-
+                print('existe')
+                self.copiar(nombreCarpeta, comparador)
             else:
                 print('no existe')       
         else:
